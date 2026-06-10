@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Showdown - Rock Paper Scissors</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #09090e;
+            --card: rgba(22, 22, 34, 0.75);
+            --border: rgba(255,255,255,0.06);
+            --primary: #f43f5e;
+            --text: #f3f4f6;
+            --text-muted: #9ca3af;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Outfit', sans-serif; }
+        body {
+            background-color: var(--bg); color: var(--text); min-height: 100vh;
+            display: flex; justify-content: center; align-items: center; padding: 20px;
+        }
+        .game-card {
+            width: 100%; max-width: 420px; background: var(--card); border: 1px solid var(--border);
+            border-radius: 28px; padding: 32px; backdrop-filter: blur(16px); text-align: center;
+            box-shadow: 0 20px 45px rgba(0,0,0,0.5);
+        }
+        h1 { font-size: 26px; font-weight: 700; margin-bottom: 8px; background: linear-gradient(135deg, #fda4af, #f43f5e); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .score-board { display: flex; justify-content: space-around; margin: 24px 0; background: rgba(255,255,255,0.02); border: 1px solid var(--border); border-radius: 16px; padding: 16px; }
+        .score-label { font-size: 13px; color: var(--text-muted); text-transform: uppercase; }
+        .score-val { font-size: 28px; font-weight: 700; color: white; }
+        .battlefield { display: flex; justify-content: space-between; align-items: center; margin: 32px 0; }
+        .player-choice, .computer-choice { font-size: 64px; }
+        .vs { font-size: 20px; font-weight: 600; color: var(--text-muted); }
+        .result-text { font-size: 20px; font-weight: 600; color: white; min-height: 30px; margin-bottom: 24px; }
+        .choices { display: flex; justify-content: center; gap: 16px; }
+        .choice-btn {
+            background: rgba(255,255,255,0.03); border: 1px solid var(--border); border-radius: 16px;
+            width: 80px; height: 80px; font-size: 36px; cursor: pointer; transition: 0.2s;
+        }
+        .choice-btn:hover { background: rgba(255,255,255,0.08); transform: translateY(-3px); border-color: var(--primary); }
+    </style>
+</head>
+<body>
+    <div class="game-card">
+        <h1>Showdown</h1>
+        <p style="color:var(--text-muted); font-size: 14px;">Rock Paper Scissors Game</p>
+        <div class="score-board">
+            <div>
+                <div class="score-label">Player</div>
+                <div class="score-val" id="player-score">0</div>
+            </div>
+            <div>
+                <div class="score-label">CPU</div>
+                <div class="score-val" id="cpu-score">0</div>
+            </div>
+        </div>
+        <div class="battlefield">
+            <div class="player-choice" id="player-view">❔</div>
+            <div class="vs">VS</div>
+            <div class="computer-choice" id="cpu-view">❔</div>
+        </div>
+        <div class="result-text" id="game-status">Choose your weapon!</div>
+        <div class="choices">
+            <button class="choice-btn" onclick="play('✊')">✊</button>
+            <button class="choice-btn" onclick="play('✋')">✋</button>
+            <button class="choice-btn" onclick="play('✌️')">✌️</button>
+        </div>
+    </div>
+    <script>
+        const pScoreEl = document.getElementById('player-score');
+        const cScoreEl = document.getElementById('cpu-score');
+        const pView = document.getElementById('player-view');
+        const cView = document.getElementById('cpu-view');
+        const status = document.getElementById('game-status');
+
+        let pScore = 0;
+        let cScore = 0;
+
+        const emojis = {'✊': 'Rock', '✋': 'Paper', '✌️': 'Scissors'};
+        const winMap = {'✊': '✌️', '✋': '✊', '✌️': '✋'};
+
+        function play(playerChoice) {
+            const weapons = ['✊', '✋', '✌️'];
+            const cpuChoice = weapons[Math.floor(Math.random() * 3)];
+            pView.innerText = playerChoice;
+            cView.innerText = cpuChoice;
+
+            if (playerChoice === cpuChoice) {
+                status.innerText = "It's a draw!";
+                status.style.color = 'var(--text-muted)';
+            } else if (winMap[playerChoice] === cpuChoice) {
+                pScore++;
+                pScoreEl.innerText = pScore;
+                status.innerText = "You Win! " + emojis[playerChoice] + " beats " + emojis[cpuChoice];
+                status.style.color = '#10b981';
+            } else {
+                cScore++;
+                cScoreEl.innerText = cScore;
+                status.innerText = "You Lose! " + emojis[cpuChoice] + " beats " + emojis[playerChoice];
+                status.style.color = '#ef4444';
+            }
+        }
+    </script>
+</body>
+</html>
